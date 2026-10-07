@@ -15,6 +15,17 @@ create table if not exists public.sales (
 );
 
 -- ------------------------------------------------------------
+-- 1b. Tabel campaigns — master data nama campaign iklan
+-- (fitur campaign Step 1; dropdown form leads menyusul di Step 2)
+-- ------------------------------------------------------------
+create table if not exists public.campaigns (
+  id uuid primary key default gen_random_uuid(),
+  nama text not null unique,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+-- ------------------------------------------------------------
 -- 2. Tabel leads — satu baris = satu leads/chat masuk
 -- ------------------------------------------------------------
 create table if not exists public.leads (
@@ -24,6 +35,7 @@ create table if not exists public.leads (
   no_hp text,
   jenis text not null check (jenis in ('organik', 'iklan')),
   sales_id uuid references public.sales (id),
+  campaign_id uuid references public.campaigns (id),
   blok_unit text,
   status text not null default 'proses' check (status in ('proses', 'deal', 'no_deal')),
   tanggal_keputusan date,
@@ -126,6 +138,7 @@ alter view public.v_unit_breakdown set (security_invoker = on);
 -- ------------------------------------------------------------
 alter table public.leads enable row level security;
 alter table public.sales enable row level security;
+alter table public.campaigns enable row level security;
 
 drop policy if exists "authenticated full access leads" on public.leads;
 create policy "authenticated full access leads"
@@ -138,6 +151,14 @@ with check (true);
 drop policy if exists "authenticated full access sales" on public.sales;
 create policy "authenticated full access sales"
 on public.sales
+for all
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "authenticated full access campaigns" on public.campaigns;
+create policy "authenticated full access campaigns"
+on public.campaigns
 for all
 to authenticated
 using (true)
@@ -164,5 +185,6 @@ for each row execute function public.set_updated_at();
 -- ------------------------------------------------------------
 create index if not exists idx_leads_status on public.leads (status);
 create index if not exists idx_leads_sales_id on public.leads (sales_id);
+create index if not exists idx_leads_campaign_id on public.leads (campaign_id);
 create index if not exists idx_leads_tanggal_masuk on public.leads (tanggal_masuk);
 create index if not exists idx_leads_jenis on public.leads (jenis);

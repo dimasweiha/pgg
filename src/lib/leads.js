@@ -8,13 +8,24 @@ import { supabase } from './supabase'
 const LEADS_SELECT = `
   id, tanggal_masuk, nama, no_hp, jenis, blok_unit, status,
   tanggal_keputusan, omset, catatan, created_at, updated_at,
-  sales:sales_id (id, nama)
+  sales:sales_id (id, nama),
+  campaign:campaign_id (id, nama)
 `
 
 /** Ambil semua sales aktif untuk dropdown */
 export async function fetchSales() {
   const { data, error } = await supabase
     .from('sales')
+    .select('id, nama, is_active')
+    .order('nama', { ascending: true })
+  if (error) throw new Error(error.message)
+  return data
+}
+
+/** Ambil semua campaign (aktif & nonaktif) untuk dropdown form leads */
+export async function fetchCampaigns() {
+  const { data, error } = await supabase
+    .from('campaigns')
     .select('id, nama, is_active')
     .order('nama', { ascending: true })
   if (error) throw new Error(error.message)

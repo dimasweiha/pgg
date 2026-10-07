@@ -13,6 +13,17 @@ Master data nama sales yang menghandle leads. Bukan akun login — murni data re
 | `is_active` | `boolean` (default `true`) | Soft-flag, bukan delete, biar histori leads lama tetap valid |
 | `created_at` | `timestamptz` (default `now()`) | |
 
+## 1b. Tabel `campaigns`
+
+Master data nama campaign iklan (fitur campaign, Step 1). Struktur identik dengan `sales`. Dikelola di halaman Pengaturan; kolom `leads.campaign_id` + dropdown di form leads menyusul di Step 2.
+
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| `id` | `uuid` (PK, default `gen_random_uuid()`) | |
+| `nama` | `text` (not null, unique) | Nama campaign, misal "Iklan Instagram Oktober" |
+| `is_active` | `boolean` (default `true`) | Soft-flag — campaign nonaktif tidak muncul di dropdown form, tapi tetap tampil di riwayat leads lama |
+| `created_at` | `timestamptz` (default `now()`) | |
+
 ## 2. Tabel `leads`
 
 Tabel utama — satu baris = satu leads/chat masuk.
@@ -25,6 +36,7 @@ Tabel utama — satu baris = satu leads/chat masuk.
 | `no_hp` | `text` | No. HP/WA leads |
 | `jenis` | `text` (not null, check in `('organik','iklan')`) | Asal leads |
 | `sales_id` | `uuid` (FK → `sales.id`, nullable) | Sales yang handle |
+| `campaign_id` | `uuid` (FK → `campaigns.id`, nullable) | Campaign iklan asal leads (Step 2 fitur campaign) — hanya diisi saat `jenis = 'iklan'`, null untuk organik/tanpa campaign |
 | `blok_unit` | `text` (nullable) | Format bebas, misal "blok D7" — diisi kalau leads sudah tertarik unit spesifik |
 | `status` | `text` (not null, default `'proses'`, check in `('proses','deal','no_deal')`) | |
 | `tanggal_keputusan` | `date` (nullable) | Tanggal status berubah jadi deal/no_deal — dipakai hitung lama_proses |
@@ -126,6 +138,7 @@ Karena single-admin, policy cukup sederhana: hanya user ter-autentikasi (role `a
 ```sql
 alter table leads enable row level security;
 alter table sales enable row level security;
+alter table campaigns enable row level security;
 
 create policy "authenticated full access leads"
 on leads for all
@@ -135,6 +148,12 @@ with check (true);
 
 create policy "authenticated full access sales"
 on sales for all
+to authenticated
+using (true)
+with check (true);
+
+create policy "authenticated full access campaigns"
+on campaigns for all
 to authenticated
 using (true)
 with check (true);
@@ -161,6 +180,7 @@ for each row execute function set_updated_at();
 ```sql
 create index idx_leads_status on leads(status);
 create index idx_leads_sales_id on leads(sales_id);
+create index idx_leads_campaign_id on leads(campaign_id);
 create index idx_leads_tanggal_masuk on leads(tanggal_masuk);
 create index idx_leads_jenis on leads(jenis);
 ```

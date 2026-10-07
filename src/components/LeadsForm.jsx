@@ -24,6 +24,7 @@ const baseSchema = z.object({
     errorMap: () => ({ message: 'Jenis wajib dipilih' }),
   }),
   sales_id: z.string().optional().default(''),
+  campaign_id: z.string().optional().default(''),
   blok_unit: z.string().trim().optional().default(''),
   tanggal_masuk: z.string().min(1, 'Tanggal masuk wajib diisi'),
 })
@@ -59,9 +60,17 @@ const editSchema = baseSchema
  * @param mode 'create' | 'edit'
  * @param lead data leads saat edit (null saat tambah)
  * @param salesList [{id, nama, is_active}] untuk dropdown
+ * @param campaignList [{id, nama, is_active}] untuk dropdown campaign (jenis = iklan)
  * @param onSubmit(payload) — payload sudah dipetakan (null untuk field kosong)
  */
-export default function LeadsForm({ mode = 'create', lead = null, salesList = [], onSubmit, onClose }) {
+export default function LeadsForm({
+  mode = 'create',
+  lead = null,
+  salesList = [],
+  campaignList = [],
+  onSubmit,
+  onClose,
+}) {
   const isEdit = mode === 'edit'
   const schema = isEdit ? editSchema : createSchema
 
@@ -81,7 +90,11 @@ export default function LeadsForm({ mode = 'create', lead = null, salesList = []
   // — bukan nilai yang perlu di-memoize.
   // oxlint-disable-next-line incompatible-library
   const status = watch('status')
+  const jenis = watch('jenis')
   const showKeputusan = isEdit && (status === 'deal' || status === 'no_deal')
+  // Dropdown campaign hanya muncul saat jenis = iklan (keputusan Dimas).
+  // Ganti jenis ke organik: campaign_id ikut dikosongkan (lihat submit).
+  const showCampaign = jenis === 'iklan'
 
   // Reset setiap kali lead/mode berubah (buka form untuk leads berbeda).
   // Pola reset() di effect adalah pola standar yang didokumentasikan
@@ -98,6 +111,8 @@ export default function LeadsForm({ mode = 'create', lead = null, salesList = []
       no_hp: values.no_hp.trim(),
       jenis: values.jenis,
       sales_id: values.sales_id || null,
+      // Campaign hanya relevan untuk jenis iklan; selalu null saat organik
+      campaign_id: values.jenis === 'iklan' ? values.campaign_id || null : null,
       // Simpan tulisan asli user; agregasi Unit Breakdown memakai normalisasi
       // di view (norm_blok) supaya "Blok D7" & "d7" terhitung unit sama.
       blok_unit: values.blok_unit?.trim() || null,
@@ -161,6 +176,27 @@ export default function LeadsForm({ mode = 'create', lead = null, salesList = []
             />
           )}
         />
+        {showCampaign && (
+          <Controller
+            name="campaign_id"
+            control={control}
+            render={({ field }) => (
+              <DropdownSelect
+                label="Nama Campaign"
+                error={errors.campaign_id?.message}
+                placeholder="— Pilih campaign —"
+                value={field.value}
+                onChange={field.onChange}
+                options={campaignList.map((c) => ({
+                  value: c.id,
+                  label: c.nama,
+                  disabled: c.is_active === false,
+                  hint: c.is_active === false ? '(nonaktif)' : undefined,
+                }))}
+              />
+            )}
+          />
+        )}
         <Input
           label="Blok Unit"
           placeholder="misal: blok D7"
@@ -256,6 +292,7 @@ function buildDefaults(lead, isEdit) {
       // Tanpa default: user memilih sendiri dari dropdown (keputusan Dimas).
       jenis: '',
       sales_id: '',
+      campaign_id: '',
       blok_unit: '',
       // Tanpa default terisi — kalender terbuka di bulan berjalan.
       tanggal_masuk: '',
@@ -266,6 +303,7 @@ function buildDefaults(lead, isEdit) {
     no_hp: lead.no_hp ?? '',
     jenis: lead.jenis ?? '',
     sales_id: lead.sales_id ?? lead.sales?.id ?? '',
+    campaign_id: lead.campaign_id ?? lead.campaign?.id ?? '',
     blok_unit: lead.blok_unit ?? '',
     tanggal_masuk: lead.tanggal_masuk ?? '',
     status: lead.status ?? 'proses',

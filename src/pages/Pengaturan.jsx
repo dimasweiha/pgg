@@ -6,23 +6,47 @@ import Button from '../components/Button.jsx'
 import Modal from '../components/Modal.jsx'
 import ConfirmDialog from '../components/ConfirmDialog.jsx'
 import { createSales, deleteSales, fetchAllSales, renameSales, setSalesActive } from '../lib/sales.js'
+import { createCampaign, deleteCampaign, fetchAllCampaigns, renameCampaign, setCampaignActive } from '../lib/campaigns.js'
 
 /**
- * Pengaturan — kelola master data nama sales (revisi Dimas 6 Okt).
- * Tabel `sales` bukan akun login: tambah, rename, aktif/nonaktif, hapus.
- * Sales nonaktif tidak muncul di dropdown form leads, tapi tetap
- * tampil di riwayat leads lama.
+ * Pengaturan — kelola master data: nama sales & nama campaign iklan.
+ * Pola CRUD sama untuk keduanya (tambah, rename, aktif/nonaktif, hapus).
+ * Campaign dikelola sejak Step 1; dropdown di form leads menyusul (Step 2).
  */
 
-function SalesFormModal({ open, mode, sales, onClose, onSaved }) {
+const MASTER_KINDS = {
+  sales: {
+    label: 'Sales',
+    fetch: fetchAllSales,
+    create: createSales,
+    rename: renameSales,
+    setActive: setSalesActive,
+    remove: deleteSales,
+    placeholder: 'misal: Budi Santoso',
+  },
+  campaign: {
+    label: 'Campaign',
+    fetch: fetchAllCampaigns,
+    create: createCampaign,
+    rename: renameCampaign,
+    setActive: setCampaignActive,
+    remove: deleteCampaign,
+    placeholder: 'misal: Iklan Instagram Oktober',
+  },
+}
+
+function NameFormModal({ open, kind, mode, item, onClose, onSaved }) {
+  const config = MASTER_KINDS[kind]
   const isEdit = mode === 'edit'
   const [nama, setNama] = useState('')
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     // oxlint-disable-next-line set-state-in-effect
-    setNama(isEdit ? (sales?.nama ?? '') : '')
-  }, [open, isEdit, sales])
+    setNama(isEdit ? (item?.nama ?? '') : '')
+  }, [open, isEdit, item])
+
+  if (!config) return null
 
   const submit = async (e) => {
     e.preventDefault()
@@ -30,11 +54,11 @@ function SalesFormModal({ open, mode, sales, onClose, onSaved }) {
     setSaving(true)
     try {
       if (isEdit) {
-        await renameSales(sales.id, nama)
-        toast.success('Nama sales berhasil diubah')
+        await config.rename(item.id, nama)
+        toast.success(`Nama ${config.label.toLowerCase()} berhasil diubah`)
       } else {
-        await createSales(nama)
-        toast.success('Sales baru berhasil ditambahkan')
+        await config.create(nama)
+        toast.success(`${config.label} baru berhasil ditambahkan`)
       }
       onSaved()
       onClose()
@@ -46,20 +70,24 @@ function SalesFormModal({ open, mode, sales, onClose, onSaved }) {
   }
 
   return (
-    <Modal open={open} title={isEdit ? 'Ubah Nama Sales' : 'Tambah Sales'} onClose={onClose}>
+    <Modal
+      open={open}
+      title={isEdit ? `Ubah Nama ${config.label}` : `Tambah ${config.label}`}
+      onClose={onClose}
+    >
       <form onSubmit={submit} className="space-y-4">
         <div>
           <label
-            htmlFor="sales-nama"
+            htmlFor={`${kind}-nama`}
             className="mb-1 block text-xs uppercase tracking-wide text-text-secondary"
           >
-            Nama Sales
+            Nama {config.label}
           </label>
           <input
-            id="sales-nama"
+            id={`${kind}-nama`}
             value={nama}
             onChange={(e) => setNama(e.target.value)}
-            placeholder="misal: Budi Santoso"
+            placeholder={config.placeholder}
             autoFocus
             className="w-full rounded-lg border border-border-default bg-surface px-3 py-2 text-sm text-text-primary transition-colors focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
           />
@@ -77,22 +105,109 @@ function SalesFormModal({ open, mode, sales, onClose, onSaved }) {
   )
 }
 
+function MasterTable({ kind, rows, loading, emptyText, busyId, onEdit, onToggle, onDelete }) {
+  const config = MASTER_KINDS[kind]
+  return (
+    <Card className="!p-0 overflow-x-auto">
+      {loading ? (
+        <p className="p-6 text-sm text-text-secondary">Memuat data…</p>
+      ) : rows.length === 0 ? (
+        <p className="p-6 text-sm text-text-secondary">{emptyText}</p>
+      ) : (
+        <table className="w-full min-w-[560px] text-sm">
+          <thead>
+            <tr className="bg-gray-50 text-xs uppercase text-text-secondary">
+              <th className="px-4 py-3 text-left font-medium">Nama {config.label}</th>
+              <th className="px-4 py-3 text-center font-medium">Status</th>
+              <th className="px-4 py-3 text-center font-medium">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr
+                key={row.id}
+                className="border-b border-border-default last:border-0 hover:bg-gray-50"
+              >
+                <td className="px-4 py-3 text-left font-medium text-text-primary">
+                  {row.nama}
+                  {row.is_active === false && (
+                    <span className="ml-2 text-xs font-normal text-text-secondary">(nonaktif)</span>
+                  )}
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                      row.is_active === false
+                        ? 'bg-gray-100 text-text-secondary'
+                        : 'bg-emerald-100 text-emerald-800'
+                    }`}
+                  >
+                    {row.is_active === false ? 'Nonaktif' : 'Aktif'}
+                  </span>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center justify-center gap-1">
+                    <button
+                      type="button"
+                      title="Ubah nama"
+                      aria-label="Ubah nama"
+                      onClick={() => onEdit(row)}
+                      className="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-primary-50 hover:text-primary-600"
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      title={row.is_active === false ? 'Aktifkan' : 'Nonaktifkan'}
+                      aria-label={row.is_active === false ? 'Aktifkan' : 'Nonaktifkan'}
+                      disabled={busyId === row.id}
+                      onClick={() => onToggle(row)}
+                      className={`rounded-lg p-1.5 transition-colors ${
+                        row.is_active === false
+                          ? 'text-text-secondary hover:bg-emerald-50 hover:text-emerald-600'
+                          : 'text-text-secondary hover:bg-amber-50 hover:text-amber-600'
+                      }`}
+                    >
+                      <Power size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      title="Hapus"
+                      aria-label="Hapus"
+                      disabled={busyId === row.id}
+                      onClick={() => onDelete(row)}
+                      className="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-red-50 hover:text-red-600"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </Card>
+  )
+}
+
 export default function PengaturanPage() {
   const [sales, setSales] = useState([])
+  const [campaigns, setCampaigns] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const [modalMode, setModalMode] = useState(null) // 'create' | 'edit' | null
-  const [editingSales, setEditingSales] = useState(null)
-  const [confirmDelete, setConfirmDelete] = useState(null)
+  const [modal, setModal] = useState(null) // { kind, mode, item } | null
+  const [confirmDelete, setConfirmDelete] = useState(null) // { kind, item } | null
   const [busyId, setBusyId] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const data = await fetchAllSales()
-      setSales(data)
+      const [salesData, campaignData] = await Promise.all([fetchAllSales(), fetchAllCampaigns()])
+      setSales(salesData)
+      setCampaigns(campaignData)
     } catch (err) {
-      toast.error(`Gagal memuat sales: ${err.message}`)
+      toast.error(`Gagal memuat data: ${err.message}`)
     } finally {
       setLoading(false)
     }
@@ -103,11 +218,11 @@ export default function PengaturanPage() {
     load()
   }, [load])
 
-  const toggleActive = async (s) => {
-    setBusyId(s.id)
+  const toggleActive = async (kind, row) => {
+    setBusyId(row.id)
     try {
-      await setSalesActive(s.id, !s.is_active)
-      toast.success(s.is_active ? `${s.nama} dinonaktifkan` : `${s.nama} diaktifkan kembali`)
+      await MASTER_KINDS[kind].setActive(row.id, !row.is_active)
+      toast.success(row.is_active ? `${row.nama} dinonaktifkan` : `${row.nama} diaktifkan kembali`)
       await load()
     } catch (err) {
       toast.error(err.message)
@@ -118,10 +233,11 @@ export default function PengaturanPage() {
 
   const handleDelete = async () => {
     if (!confirmDelete) return
-    setBusyId(confirmDelete.id)
+    const config = MASTER_KINDS[confirmDelete.kind]
+    setBusyId(confirmDelete.item.id)
     try {
-      await deleteSales(confirmDelete.id)
-      toast.success('Sales berhasil dihapus')
+      await config.remove(confirmDelete.item.id)
+      toast.success(`${config.label} berhasil dihapus`)
       setConfirmDelete(null)
       await load()
     } catch (err) {
@@ -134,122 +250,76 @@ export default function PengaturanPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-text-primary">Pengaturan</h1>
-          <p className="mt-0.5 text-sm text-text-secondary">
-            Kelola daftar nama sales yang bisa dipilih di form leads.
-          </p>
-        </div>
-        <Button onClick={() => setModalMode('create')}>
-          <span className="flex items-center gap-1.5">
-            <Plus size={16} />
-            Tambah Sales
-          </span>
-        </Button>
+      <div>
+        <h1 className="text-xl font-semibold text-text-primary">Pengaturan</h1>
+        <p className="mt-0.5 text-sm text-text-secondary">
+          Kelola master data nama sales dan nama campaign iklan.
+        </p>
       </div>
 
-      <Card className="!p-0 overflow-x-auto">
-        {loading ? (
-          <p className="p-6 text-sm text-text-secondary">Memuat data…</p>
-        ) : sales.length === 0 ? (
-          <p className="p-6 text-sm text-text-secondary">
-            Belum ada sales. Klik "Tambah Sales" untuk menambahkan yang pertama.
-          </p>
-        ) : (
-          <table className="w-full min-w-[560px] text-sm">
-            <thead>
-              <tr className="bg-gray-50 text-xs uppercase text-text-secondary">
-                <th className="px-4 py-3 text-left font-medium">Nama Sales</th>
-                <th className="px-4 py-3 text-center font-medium">Status</th>
-                <th className="px-4 py-3 text-center font-medium">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sales.map((s) => (
-                <tr
-                  key={s.id}
-                  className="border-b border-border-default last:border-0 hover:bg-gray-50"
-                >
-                  <td className="px-4 py-3 text-left font-medium text-text-primary">
-                    {s.nama}
-                    {s.is_active === false && (
-                      <span className="ml-2 text-xs font-normal text-text-secondary">(nonaktif)</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        s.is_active === false
-                          ? 'bg-gray-100 text-text-secondary'
-                          : 'bg-emerald-100 text-emerald-800'
-                      }`}
-                    >
-                      {s.is_active === false ? 'Nonaktif' : 'Aktif'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-center gap-1">
-                      <button
-                        type="button"
-                        title="Ubah nama"
-                        aria-label="Ubah nama"
-                        onClick={() => {
-                          setEditingSales(s)
-                          setModalMode('edit')
-                        }}
-                        className="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-primary-50 hover:text-primary-600"
-                      >
-                        <Pencil size={16} />
-                      </button>
-                      <button
-                        type="button"
-                        title={s.is_active === false ? 'Aktifkan' : 'Nonaktifkan'}
-                        aria-label={s.is_active === false ? 'Aktifkan' : 'Nonaktifkan'}
-                        disabled={busyId === s.id}
-                        onClick={() => toggleActive(s)}
-                        className={`rounded-lg p-1.5 transition-colors ${
-                          s.is_active === false
-                            ? 'text-text-secondary hover:bg-emerald-50 hover:text-emerald-600'
-                            : 'text-text-secondary hover:bg-amber-50 hover:text-amber-600'
-                        }`}
-                      >
-                        <Power size={16} />
-                      </button>
-                      <button
-                        type="button"
-                        title="Hapus"
-                        aria-label="Hapus"
-                        disabled={busyId === s.id}
-                        onClick={() => setConfirmDelete(s)}
-                        className="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-red-50 hover:text-red-600"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-text-primary">Sales</h2>
+          <Button
+            variant="secondary"
+            onClick={() => setModal({ kind: 'sales', mode: 'create', item: null })}
+          >
+            <span className="flex items-center gap-1.5">
+              <Plus size={16} />
+              Tambah Sales
+            </span>
+          </Button>
+        </div>
+        <MasterTable
+          kind="sales"
+          rows={sales}
+          loading={loading}
+          emptyText={'Belum ada sales. Klik "Tambah Sales" untuk menambahkan yang pertama.'}
+          busyId={busyId}
+          onEdit={(row) => setModal({ kind: 'sales', mode: 'edit', item: row })}
+          onToggle={(row) => toggleActive('sales', row)}
+          onDelete={(row) => setConfirmDelete({ kind: 'sales', item: row })}
+        />
+      </section>
 
-      <SalesFormModal
-        open={modalMode !== null}
-        mode={modalMode ?? 'create'}
-        sales={editingSales}
-        onClose={() => {
-          setModalMode(null)
-          setEditingSales(null)
-        }}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-text-primary">Campaign Iklan</h2>
+          <Button
+            variant="secondary"
+            onClick={() => setModal({ kind: 'campaign', mode: 'create', item: null })}
+          >
+            <span className="flex items-center gap-1.5">
+              <Plus size={16} />
+              Tambah Campaign
+            </span>
+          </Button>
+        </div>
+        <MasterTable
+          kind="campaign"
+          rows={campaigns}
+          loading={loading}
+          emptyText={'Belum ada campaign. Klik "Tambah Campaign" untuk menambahkan yang pertama.'}
+          busyId={busyId}
+          onEdit={(row) => setModal({ kind: 'campaign', mode: 'edit', item: row })}
+          onToggle={(row) => toggleActive('campaign', row)}
+          onDelete={(row) => setConfirmDelete({ kind: 'campaign', item: row })}
+        />
+      </section>
+
+      <NameFormModal
+        open={modal !== null}
+        kind={modal?.kind ?? 'sales'}
+        mode={modal?.mode ?? 'create'}
+        item={modal?.item ?? null}
+        onClose={() => setModal(null)}
         onSaved={load}
       />
 
       <ConfirmDialog
         open={confirmDelete !== null}
-        title="Hapus sales?"
-        message={`"${confirmDelete?.nama ?? ''}" akan dihapus permanen. Bila masih ada leads yang terhubung, hapus akan ditolak — nonaktifkan saja agar riwayat leads tetap rapi.`}
+        title={`Hapus ${MASTER_KINDS[confirmDelete?.kind ?? 'sales'].label.toLowerCase()}?`}
+        message={`"${confirmDelete?.item?.nama ?? ''}" akan dihapus permanen. Bila masih ada leads yang terhubung, hapus akan ditolak — nonaktifkan saja agar riwayat leads tetap rapi.`}
         confirmLabel="Hapus"
         onConfirm={handleDelete}
         onClose={() => setConfirmDelete(null)}

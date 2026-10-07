@@ -14,6 +14,7 @@ import { exportLeadsToExcel } from '../lib/exportExcel.js'
 import {
   createLead,
   deleteLead,
+  fetchCampaigns,
   fetchLeads,
   fetchSales,
   formatTanggal,
@@ -50,6 +51,7 @@ export default function LeadsPage() {
 
   const [leads, setLeads] = useState([])
   const [salesList, setSalesList] = useState([])
+  const [campaignList, setCampaignList] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
@@ -123,11 +125,14 @@ export default function LeadsPage() {
       setLoading(false)
     }
   }, [debouncedSearch, filterSales, filterStatus, filterJenis, dateRange])
-  // Sales untuk dropdown form & filter — load sekali
+  // Sales & campaign untuk dropdown form — load sekali
   useEffect(() => {
     fetchSales()
       .then(setSalesList)
       .catch((err) => toast.error(`Gagal memuat sales: ${err.message}`))
+    fetchCampaigns()
+      .then(setCampaignList)
+      .catch((err) => toast.error(`Gagal memuat campaign: ${err.message}`))
   }, [])
 
   // Data-fetching on mount + saat filter berubah — pola standar;
@@ -473,6 +478,7 @@ export default function LeadsPage() {
               mode={modalMode}
               lead={editingLead}
               salesList={salesList}
+              campaignList={campaignList}
               onSubmit={handleSubmit}
               onClose={closeModal}
             />
