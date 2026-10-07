@@ -8,6 +8,7 @@ import {
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
+  Megaphone,
   Search,
   Settings,
   Timer,
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   { to: '/leads', label: 'Leads', icon: Users, end: true },
   { to: '/leads/aging', label: 'Umur Leads', icon: Timer, end: false },
   { to: '/units', label: 'Unit Breakdown', icon: Building2, end: false },
+  { to: '/iklan', label: 'Performa Iklan', icon: Megaphone, end: true },
   { to: '/pengaturan', label: 'Pengaturan', icon: Settings, end: true },
 ]
 
@@ -226,7 +228,7 @@ export default function Layout() {
           )}
         </header>
 
-        <main className="mx-auto w-full max-w-[1400px] flex-1 px-6 py-8 lg:px-8">
+        <main className="w-full flex-1 px-6 py-8 lg:px-8">
           <Outlet />
         </main>
       </div>

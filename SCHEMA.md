@@ -24,6 +24,22 @@ Master data nama campaign iklan (fitur campaign, Step 1). Struktur identik denga
 | `is_active` | `boolean` (default `true`) | Soft-flag — campaign nonaktif tidak muncul di dropdown form, tapi tetap tampil di riwayat leads lama |
 | `created_at` | `timestamptz` (default `now()`) | |
 
+## 1c. Tabel `iklan_harian`
+
+Angka operasional iklan per tanggal (fitur Performa Iklan, 7 Okt) — porting sheet Excel Dimas. **Input manual**, bukan turunan tabel leads. 1 baris = 1 tanggal (`tanggal` unique). Rasio/cost (cost per result, cost per real chat, MQL ratio) tidak disimpan — dihitung di frontend, pembagi 0 → "-".
+
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| `id` | `uuid` (PK, default `gen_random_uuid()`) | |
+| `tanggal` | `date` (not null, unique) | Kunci per hari |
+| `spent` | `numeric` (default 0) | Spent Meta Ads (Rp) |
+| `result_dashboard` | `integer` (default 0) | Result Dashboard |
+| `real_chat` | `integer` (default 0) | Real Chat |
+| `mql` | `integer` (default 0) | MQL (Marketing Qualified Lead) |
+| `no_respon` | `integer` (default 0) | No Respon |
+| `created_at` | `timestamptz` (default `now()`) | |
+| `updated_at` | `timestamptz` (default `now()`, auto-update via trigger trigger_leads_updated_at — trigger ini belum dipasang; menyusul bila perlu) | |
+
 ## 2. Tabel `leads`
 
 Tabel utama — satu baris = satu leads/chat masuk.
@@ -139,6 +155,7 @@ Karena single-admin, policy cukup sederhana: hanya user ter-autentikasi (role `a
 alter table leads enable row level security;
 alter table sales enable row level security;
 alter table campaigns enable row level security;
+alter table iklan_harian enable row level security;
 
 create policy "authenticated full access leads"
 on leads for all
@@ -154,6 +171,12 @@ with check (true);
 
 create policy "authenticated full access campaigns"
 on campaigns for all
+to authenticated
+using (true)
+with check (true);
+
+create policy "authenticated full access iklan_harian"
+on iklan_harian for all
 to authenticated
 using (true)
 with check (true);

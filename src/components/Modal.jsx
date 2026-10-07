@@ -1,7 +1,12 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 /**
  * Modal generik — backdrop + panel tengah.
+ * Dirender via portal ke document.body supaya overlay fixed z-50 TIDAK
+ * terkurung stacking context ancestor (header sticky/blur, dsb) —
+ * backdrop selalu menutup seluruh layar termasuk header & sidebar
+ * (bug "putih2 nyisa" saat popup, lapor Dimas 7 Okt).
  * Tutup dengan klik backdrop, tombol, atau Escape.
  */
 export default function Modal({ open, title, onClose, children }) {
@@ -14,7 +19,7 @@ export default function Modal({ open, title, onClose, children }) {
 
   if (!open) return null
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
       onClick={onClose}
@@ -38,6 +43,7 @@ export default function Modal({ open, title, onClose, children }) {
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

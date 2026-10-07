@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { ChevronDown, Pencil, Search, SlidersHorizontal, Trash2 } from 'lucide-react'
+import { ChevronDown, Info, Pencil, Search, SlidersHorizontal, Trash2 } from 'lucide-react'
 import Button from '../components/Button.jsx'
 import Card from '../components/Card.jsx'
 import Checkbox from '../components/Checkbox.jsx'
@@ -10,6 +10,7 @@ import StatusBadge from '../components/StatusBadge.jsx'
 import Modal from '../components/Modal.jsx'
 import ConfirmDialog from '../components/ConfirmDialog.jsx'
 import LeadsForm from '../components/LeadsForm.jsx'
+import LeadInfoModal from '../components/LeadInfoModal.jsx'
 import { exportLeadsToExcel } from '../lib/exportExcel.js'
 import {
   createLead,
@@ -67,6 +68,7 @@ export default function LeadsPage() {
 
   const [modalMode, setModalMode] = useState(null) // 'create' | 'edit' | null
   const [editingLead, setEditingLead] = useState(null)
+  const [infoLead, setInfoLead] = useState(null) // lead object | null — modal lihat detail
   const [confirmDelete, setConfirmDelete] = useState(null) // lead object | null
 
   // Debounce search 400ms di dalam event handler (bukan di effect)
@@ -442,10 +444,19 @@ export default function LeadsPage() {
                   <td className="whitespace-nowrap px-4 py-3">
                     <button
                       type="button"
+                      aria-label={`Info ${lead.nama}`}
+                      title="Info"
+                      onClick={() => setInfoLead(lead)}
+                      className="inline-flex rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-primary-50 hover:text-primary-600"
+                    >
+                      <Info size={16} />
+                    </button>
+                    <button
+                      type="button"
                       aria-label={`Edit ${lead.nama}`}
                       title="Edit"
                       onClick={() => openEdit(lead)}
-                      className="inline-flex rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-sky-50 hover:text-sky-600"
+                      className="ml-1 inline-flex rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-sky-50 hover:text-sky-600"
                     >
                       <Pencil size={16} />
                     </button>
@@ -485,6 +496,9 @@ export default function LeadsPage() {
           </div>
         )}
       </Modal>
+
+      {/* Modal info (lihat detail) */}
+      {infoLead && <LeadInfoModal lead={infoLead} onClose={() => setInfoLead(null)} />}
 
       {/* Konfirmasi hapus */}
       <ConfirmDialog

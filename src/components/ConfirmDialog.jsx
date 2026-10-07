@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Button from './Button.jsx'
 
 /**
  * ConfirmDialog — modal konfirmasi generik (dipakai untuk hapus leads).
+ * Portal ke document.body — alasan sama dengan Modal.jsx (backdrop
+ * harus di atas header/sidebar, bug "putih2 nyisa" 7 Okt).
  * Tutup dengan klik backdrop atau tombol batal.
  */
 export default function ConfirmDialog({ open, title, message, confirmLabel = 'Hapus', onConfirm, onClose }) {
@@ -15,7 +18,7 @@ export default function ConfirmDialog({ open, title, message, confirmLabel = 'Ha
 
   if (!open) return null
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
       onClick={onClose}
@@ -37,6 +40,7 @@ export default function ConfirmDialog({ open, title, message, confirmLabel = 'Ha
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

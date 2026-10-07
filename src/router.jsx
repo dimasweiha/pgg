@@ -5,6 +5,7 @@ import DashboardPage from './pages/Dashboard.jsx'
 import LeadsPage from './pages/Leads.jsx'
 import AgingPage from './pages/Aging.jsx'
 import UnitsPage from './pages/Units.jsx'
+import PerformaIklanPage from './pages/PerformaIklan.jsx'
 import PengaturanPage from './pages/Pengaturan.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Layout from './components/Layout.jsx'
@@ -29,6 +30,7 @@ const router = createHashRouter([
               { path: 'leads', element: <LeadsPage /> },
               { path: 'leads/aging', element: <AgingPage /> },
               { path: 'units', element: <UnitsPage /> },
+              { path: 'iklan', element: <PerformaIklanPage /> },
               { path: 'pengaturan', element: <PengaturanPage /> },
             ],
           },
