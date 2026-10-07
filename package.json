@@ -1,0 +1,39 @@
+{
+  "name": "grati-garden-leads-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "@supabase/supabase-js": "^2.117.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.52.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.89.0",
+    "react-hot-toast": "^2.6.1",
+    "react-is": "^19.3.0",
+    "react-router-dom": "^6.30.6",
+    "recharts": "^3.10.1",
+    "xlsx": "^0.18.5",
+    "zod": "^4.6.5",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.6.1",
+    "oxlint": "^1.81.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.3.0"
+  }
+}
