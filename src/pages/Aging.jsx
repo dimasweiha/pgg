@@ -173,7 +173,11 @@ export default function AgingPage() {
                     <td className="px-4 py-3">
                       <span
                         className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          level === 'critical' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'
+                          level === 'critical'
+                            ? 'bg-red-100 text-red-800'
+                            : level === 'warning'
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-gray-100 text-text-secondary'
                         }`}
                       >
                         {LEVEL_LABEL[level]}

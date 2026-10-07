@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react'
 import Button from '../components/Button.jsx'
 import Card from '../components/Card.jsx'
+import DropdownSelect from '../components/DropdownSelect.jsx'
 import Input from '../components/Input.jsx'
 import Modal from '../components/Modal.jsx'
 import {
@@ -57,6 +58,12 @@ function barisKosong(tanggal) {
 
 /** Tanggal sekarang — dihitung sekali di module level (purity) */
 const SEKARANG = new Date()
+
+/** Pilihan tahun untuk dropdown: 2024 s/d tahun depan */
+const DAFTAR_TAHUN = Array.from(
+  { length: SEKARANG.getFullYear() + 1 - 2024 + 1 },
+  (_, i) => 2024 + i,
+)
 
 export default function PerformaIklanPage() {
   const [tahun, setTahun] = useState(SEKARANG.getFullYear())
@@ -133,12 +140,26 @@ export default function PerformaIklanPage() {
             Angka operasional iklan harian — klik tanggal untuk mengisi. Cost &amp; rasio dihitung otomatis.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {bisaLompatHariIni && (
             <Button variant="secondary" onClick={() => { setTahun(SEKARANG.getFullYear()); setBulan(SEKARANG.getMonth()) }}>
               Bulan ini
             </Button>
           )}
+          {/* Lompat langsung: dropdown Bulan + Tahun (permintaan Dimas —
+              chevron ‹ › saja kelamaan kalau mau cek tahun 2025) */}
+          <DropdownSelect
+            className="w-[140px]"
+            value={String(bulan)}
+            onChange={(v) => setBulan(Number(v))}
+            options={BULAN.map((b, i) => ({ value: String(i), label: b }))}
+          />
+          <DropdownSelect
+            className="w-[100px]"
+            value={String(tahun)}
+            onChange={(v) => setTahun(Number(v))}
+            options={DAFTAR_TAHUN.map((t) => ({ value: String(t), label: String(t) }))}
+          />
           <div className="flex items-center rounded-lg border border-border-default bg-surface">
             <button
               type="button"
@@ -148,9 +169,6 @@ export default function PerformaIklanPage() {
             >
               <ChevronLeft size={16} />
             </button>
-            <span className="min-w-[140px] text-center text-sm font-medium text-text-primary">
-              {BULAN[bulan]} {tahun}
-            </span>
             <button
               type="button"
               onClick={() => pindahBulan(1)}
@@ -167,7 +185,7 @@ export default function PerformaIklanPage() {
         {loading ? (
           <p className="p-6 text-sm text-text-secondary">Memuat data…</p>
         ) : (
-          <table className="w-full min-w-[900px] text-sm">
+          <table className="w-full min-w-[1150px] text-sm whitespace-nowrap">
             <thead>
               <tr className="bg-gray-50 text-xs uppercase text-text-secondary">
                 <th className="px-4 py-3 text-left font-medium">Tanggal</th>

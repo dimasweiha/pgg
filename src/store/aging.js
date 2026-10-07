@@ -22,11 +22,12 @@ export const useAgingStore = create(
  * - normal   : <= threshold            → netral
  * - warning  : threshold < x <= 2x      → amber-800
  * - critical : > 2x threshold           → red-800
+ * threshold null ("Semua leads") → semua normal, tanpa level urgensi.
  * Catatan revisi Dimas (5 Okt): baris TIDAK diberi background kuning/merah —
  * urgensi cukup disampaikan lewat warna teks Aging + pill Level.
  */
 export function agingLevel(agingHari, threshold) {
-  if (agingHari == null) return 'normal'
+  if (agingHari == null || threshold == null) return 'normal'
   if (agingHari > threshold * 2) return 'critical'
   if (agingHari > threshold) return 'warning'
   return 'normal'
