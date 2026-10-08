@@ -200,7 +200,7 @@ export default function Layout() {
                 onClick={() => setSearchOpen(true)}
                 title="Cari leads (⌘K)"
                 aria-label="Cari leads"
-                className="flex items-center gap-2 rounded-lg border border-border-default bg-surface px-3.5 py-2.5 text-sm text-text-secondary transition-colors hover:border-primary-600/40 hover:text-text-primary sm:w-72"
+                className="flex items-center gap-2 rounded-lg border border-border-default bg-surface px-3.5 py-2 text-sm text-text-secondary transition-colors hover:border-primary-600/40 hover:text-text-primary sm:w-72"
               >
                 <Search size={16} className="shrink-0" />
                 <span className="hidden flex-1 text-left sm:inline">Cari leads…</span>
