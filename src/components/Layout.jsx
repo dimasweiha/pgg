@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   Building2,
-  CalendarDays,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -17,6 +16,8 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/auth'
+import Button from './Button.jsx'
+import Modal from './Modal.jsx'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -49,8 +50,8 @@ export default function Layout() {
   const email = session?.user?.email ?? ''
 
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchOpen, setSearchOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const searchInputRef = useRef(null)
 
   // Collapse/expand sidebar (revisi Dimas 6 Okt) — statusnya disimpan
   // di localStorage supaya persist antar reload.
@@ -82,6 +83,8 @@ export default function Layout() {
   const submitSearch = (e) => {
     e.preventDefault()
     const term = searchTerm.trim()
+    setSearchOpen(false)
+    setSearchTerm('')
     navigate(term ? `/leads?q=${encodeURIComponent(term)}` : '/leads')
   }
 
@@ -122,15 +125,26 @@ export default function Layout() {
           sidebarCollapsed ? 'w-[76px]' : 'w-64'
         }`}
       >
-        <div className={`flex items-center py-5 ${sidebarCollapsed ? 'justify-center px-2' : 'px-5'}`}>
+        <div className="flex items-center justify-between gap-2 px-5 py-5">
           {sidebarCollapsed ? (
-            <span className="text-sm font-bold text-primary-600">PGG</span>
+            <span className="mx-auto text-sm font-bold text-primary-600">PGG</span>
           ) : (
-            <div className="leading-tight">
-              <p className="text-sm font-semibold text-text-primary">Perumahan Grati Garden</p>
+            <div className="min-w-0 leading-tight">
+              <p className="truncate text-sm font-semibold text-text-primary">
+                Perumahan Grati Garden
+              </p>
               <p className="text-[11px] text-text-secondary">Leads Dashboard</p>
             </div>
           )}
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            title={sidebarCollapsed ? 'Buka sidebar' : 'Lipat sidebar'}
+            aria-label={sidebarCollapsed ? 'Buka sidebar' : 'Lipat sidebar'}
+            className="hidden shrink-0 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-gray-50 hover:text-text-primary lg:block"
+          >
+            {sidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+          </button>
         </div>
 
         {!sidebarCollapsed && (
@@ -164,16 +178,7 @@ export default function Layout() {
         <header className="sticky top-0 z-20 border-b border-border-default bg-surface/90 backdrop-blur">
           <div className="flex h-16 items-center gap-4 px-6 lg:px-8">
             <div className="flex shrink-0 items-center gap-2">
-              {/* Expand/collapse sidebar (revisi Dimas 6 Okt) — hanya desktop */}
-              <button
-                type="button"
-                onClick={toggleSidebar}
-                title={sidebarCollapsed ? 'Buka sidebar' : 'Lipat sidebar'}
-                aria-label={sidebarCollapsed ? 'Buka sidebar' : 'Lipat sidebar'}
-                className="hidden rounded-lg p-2 text-text-secondary transition-colors hover:bg-gray-50 hover:text-text-primary lg:block"
-              >
-                {sidebarCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
-              </button>
+              {/* Menu mobile (revisi 8 Okt: tombol lipat sidebar pindah ke kanan brand) */}
               <button
                 type="button"
                 onClick={() => setMobileNavOpen((v) => !v)}
@@ -182,31 +187,21 @@ export default function Layout() {
               >
                 {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
+
+              {/* Search leads — tombol pembuka popup (revisi Dimas 8 Okt) */}
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                title="Cari leads"
+                aria-label="Cari leads"
+                className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
+              >
+                <Search size={16} className="shrink-0" />
+                <span className="hidden sm:inline">Cari leads…</span>
+              </button>
             </div>
 
-            {/* Search leads — pindah dari sidebar ke header (revisi Dimas 8 Okt) */}
-            <form onSubmit={submitSearch} className="mx-auto w-full max-w-md">
-              <div className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2 transition-colors focus-within:border-primary-600 focus-within:bg-surface">
-                <Search size={16} className="shrink-0 text-text-secondary" />
-                <input
-                  ref={searchInputRef}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Cari leads…"
-                  aria-label="Cari leads"
-                  className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-secondary focus:outline-none"
-                />
-                <kbd className="hidden rounded border border-border-default bg-surface px-1.5 py-0.5 text-[10px] text-text-secondary xl:block">
-                  Enter
-                </kbd>
-              </div>
-            </form>
-
-            <div className="flex shrink-0 items-center gap-2 text-text-secondary">
-              <span className="hidden items-center gap-2 rounded-lg border border-border-default bg-surface px-3 py-2 text-xs sm:flex">
-                <CalendarDays size={14} />
-                Data per hari ini
-              </span>
+            <div className="ml-auto flex shrink-0 items-center gap-2 text-text-secondary">
               <span className="lg:hidden">
                 <Avatar email={email} />
               </span>
@@ -232,6 +227,29 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Popup search leads (revisi Dimas 8 Okt — klik tombol header, bukan ketik di header) */}
+      <Modal open={searchOpen} title="Cari Leads" onClose={() => setSearchOpen(false)}>
+        <form onSubmit={submitSearch} className="space-y-4">
+          <div className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2.5 transition-colors focus-within:border-primary-600 focus-within:bg-surface">
+            <Search size={16} className="shrink-0 text-text-secondary" />
+            <input
+              autoFocus
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Nama, no. HP, blok unit…"
+              aria-label="Kata kunci pencarian"
+              className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-secondary focus:outline-none"
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="secondary" onClick={() => setSearchOpen(false)}>
+              Batal
+            </Button>
+            <Button type="submit">Cari</Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   )
 }

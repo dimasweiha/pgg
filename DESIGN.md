@@ -116,16 +116,15 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 ## 7. Sidebar & Header
 
-**Judul halaman** (revisi Dimas 6 Okt): dirender **di dalam konten** tiap halaman, di atas baris penjelasan — `h1 text-xl font-semibold text-text-primary` + deskripsi `mt-0.5 text-sm text-text-secondary` (kiri), aksi/controls sejajar bawah di kanan. Header sticky TIDAK menampilkan judul lagi (cuma tombol menu mobile + badge "Data per hari ini" + avatar mobile). Judul per halaman: Dashboard / Leads / Umur Leads / Unit Breakdown / Pengaturan.
+**Judul halaman** (revisi Dimas 6 Okt): dirender **di dalam konten** tiap halaman, di atas baris penjelasan — `h1 text-xl font-semibold text-text-primary` + deskripsi `mt-0.5 text-sm text-text-secondary` (kiri), aksi/controls sejajar bawah di kanan. Header sticky TIDAK menampilkan judul lagi (revisi 8 Okt: cuma tombol menu mobile + tombol search popup + avatar mobile). Judul per halaman: Dashboard / Leads / Umur Leads / Unit Breakdown / Pengaturan.
 
-**Collapse sidebar** (revisi Dimas 6 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` di kiri header (desktop) melipat sidebar `w-64` → `w-[76px]` mode ikon saja — brand jadi monogram teks **"PGG"** center (revisi 8 Okt, kotak logo "GG" dihapus), search & label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
+**Collapse sidebar** (revisi Dimas 6 Okt; tombol pindah 8 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` kini di **kanan teks brand di dalam sidebar** (bukan lagi di header) — melipat sidebar `w-64` → `w-[76px]` mode ikon saja: brand jadi monogram teks **"PGG"** center (kotak logo "GG" dihapus), label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
 
 **Sidebar** (desktop ≥ lg, `hidden lg:flex`, sticky h-screen):
 
 - `w-64 bg-surface border-r border-border-default`
-- Brand: **teks "Perumahan Grati Garden"** (revisi 8 Okt — kotak logo "GG" dihapus) + subjudul "Leads Dashboard" 2 baris; collapsed → monogram teks "PGG"
-- Search: **pindah ke header** (revisi 8 Okt — header dulu kosong melompong); sidebar kini langsung label seksi
-- Label seksi `MAIN MENU` — `text-[11px] font-medium uppercase tracking-wider text-text-secondary`
+- Brand: **teks "Perumahan Grati Garden"** (revisi 8 Okt — kotak logo "GG" dihapus) + subjudul "Leads Dashboard"; **tombol collapse `PanelLeftClose`/`PanelLeftOpen` di kanan teks** (revisi 8 Okt, pindah dari header); collapsed → monogram teks "PGG" center + tombol expand
+- Label seksi `MAIN MENU` — `text-[11px] font-medium uppercase tracking-wider text-text-secondary` (search sidebar dihapus 8 Okt, pindah ke header)
 - Nav item: `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm` + ikon lucide 18px
   - Aktif: `bg-primary-50 font-medium text-primary-600`
   - Non-aktif: `text-text-secondary hover:bg-gray-50 hover:text-text-primary`
@@ -134,8 +133,8 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 **Header** (sticky, `bg-surface/90 backdrop-blur`, border-b):
 
-- Kiri: (mobile: hamburger) + judul halaman dinamis dari route
-- Kanan: chip tanggal "Data per hari ini" (hidden < sm) + avatar (mobile)
+- Kiri: hamburger (mobile) + **tombol search** (ikon `Search` + label "Cari leads…", label hidden < sm) yang membuka **popup modal "Cari Leads"** — autoFocus, placeholder "Nama, no. HP, blok unit…", tombol Batal/Cari, submit → `/leads?q=<term>` (revisi 8 Okt; search sempat ada di sidebar, lalu input inline di header, kini jadi popup)
+- Kanan: avatar (mobile saja). Chip "Data per hari ini" **dihapus** (revisi 8 Okt)
 
 ## 8. Chart (Recharts)
 
