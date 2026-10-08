@@ -86,7 +86,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 | Komponen | Spesifikasi |
 |---|---|
-| `Login` (revisi 8 Okt) | **Layout split (revisi lanjutan 8 Okt)**: kiri foto kawasan perumahan **penuh warna** `w-1/2 object-cover` (terlihat jelas, bukan watermark), kanan panel form login `w-1/2` center `max-w-sm`. Mobile (< lg): foto disembunyikan, form full width. Brand tanpa logo kotak "GG" — judul teks **"Perumahan Grati Garden"** `text-2xl font-bold tracking-tight` center + subjudul "Leads Dashboard". Footer "Dashboard internal — akses terbatas admin." dihapus. Foto: `src/assets/kawasan.webp` |
+| `Login` (revisi 8 Okt) | **Background foto kawasan full layar** (`src/assets/kawasan.webp`, `fixed inset-0 object-cover`) + **overlay hitam transparan `bg-black/45`** (revisi lanjutan 8 Okt — bagian cerah foto tetap terlihat, form putih kontras). Judul **"Perumahan Grati Garden"** putih `drop-shadow-md` + subjudul "Leads Dashboard" `text-white/80`, form card putih `shadow-xl`. Tanpa logo kotak "GG", tanpa footer "Dashboard internal". Layout split foto-kiri/form-kanan sempat dicoba lalu diganti full background |
 | `Card` | `rounded-xl border border-border-default bg-surface p-6` |
 | `SummaryCard` | baris 1: label `text-sm text-secondary`; baris 2: angka `text-2xl font-bold` + delta % hijau ↑ / merah ↓ (`text-sm`); **footer** `border-t`: selisih `+N` tebal + "dari bulan lalu" abu + arrow → (pembanding = bulan kalender lalu). Tanpa icon — keep it clean |
 | `StatusBadge` | `rounded-full px-2.5 py-0.5 text-xs font-medium` + warna status |

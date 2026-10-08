@@ -34,27 +34,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-bg-base">
-      {/* Kiri: foto kawasan terlihat penuh (desktop ≥ lg) — revisi Dimas 8 Okt */}
-      <div className="relative hidden w-1/2 lg:block">
-        <img
-          src={fotoKawasan}
-          alt="Kawasan Perumahan Grati Garden"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      </div>
+    <div className="relative flex min-h-screen items-center justify-center px-6">
+      {/* Background foto kawasan full layar + overlay hitam transparan
+          (revisi Dimas 8 Okt) — bagian cerah foto tetap menonjol, form putih makin kontras */}
+      <img
+        src={fotoKawasan}
+        alt=""
+        aria-hidden="true"
+        className="fixed inset-0 h-full w-full object-cover"
+      />
+      <div className="fixed inset-0 bg-black/45" aria-hidden="true" />
 
-      {/* Kanan: panel form login */}
-      <div className="flex w-full items-center justify-center px-6 lg:w-1/2">
-        <div className="w-full max-w-sm">
+      <div className="relative w-full max-w-sm">
         <div className="mb-6 text-center">
-          <p className="text-2xl font-bold tracking-tight text-text-primary">
+          <p className="text-2xl font-bold tracking-tight text-white drop-shadow-md">
             Perumahan Grati Garden
           </p>
-          <p className="mt-1 text-xs text-text-secondary">Leads Dashboard</p>
+          <p className="mt-1 text-xs text-white/80">Leads Dashboard</p>
         </div>
 
-        <div className="rounded-xl border border-border-default bg-surface p-6">
+        <div className="rounded-xl border border-border-default bg-surface p-6 shadow-xl">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label
@@ -104,7 +103,6 @@ export default function LoginPage() {
               {isSubmitting ? 'Memproses…' : 'Masuk'}
             </button>
           </form>
-        </div>
         </div>
       </div>
     </div>
