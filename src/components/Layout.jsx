@@ -48,7 +48,7 @@ export default function Layout() {
 
   const email = session?.user?.email ?? ''
 
-  const [sidebarSearch, setSidebarSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const searchInputRef = useRef(null)
 
@@ -79,9 +79,9 @@ export default function Layout() {
     navigate('/login', { replace: true })
   }
 
-  const submitSidebarSearch = (e) => {
+  const submitSearch = (e) => {
     e.preventDefault()
-    const term = sidebarSearch.trim()
+    const term = searchTerm.trim()
     navigate(term ? `/leads?q=${encodeURIComponent(term)}` : '/leads')
   }
 
@@ -134,25 +134,7 @@ export default function Layout() {
         </div>
 
         {!sidebarCollapsed && (
-          <form onSubmit={submitSidebarSearch} className="px-4 pb-2">
-            <div className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2 transition-colors focus-within:border-primary-600 focus-within:bg-surface">
-              <Search size={16} className="shrink-0 text-text-secondary" />
-              <input
-                ref={searchInputRef}
-                value={sidebarSearch}
-                onChange={(e) => setSidebarSearch(e.target.value)}
-                placeholder="Cari leads…"
-                className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-secondary focus:outline-none"
-              />
-              <kbd className="hidden rounded border border-border-default bg-surface px-1.5 py-0.5 text-[10px] text-text-secondary xl:block">
-                Enter
-              </kbd>
-            </div>
-          </form>
-        )}
-
-        {!sidebarCollapsed && (
-          <p className="px-5 pb-1 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-secondary">
+          <p className="px-5 pb-1 pt-2 text-[11px] font-medium uppercase tracking-wider text-text-secondary">
             Main Menu
           </p>
         )}
@@ -180,8 +162,8 @@ export default function Layout() {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <header className="sticky top-0 z-20 border-b border-border-default bg-surface/90 backdrop-blur">
-          <div className="flex h-16 items-center justify-between gap-4 px-6 lg:px-8">
-            <div className="flex items-center gap-2">
+          <div className="flex h-16 items-center gap-4 px-6 lg:px-8">
+            <div className="flex shrink-0 items-center gap-2">
               {/* Expand/collapse sidebar (revisi Dimas 6 Okt) — hanya desktop */}
               <button
                 type="button"
@@ -201,7 +183,26 @@ export default function Layout() {
                 {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
-            <div className="flex items-center gap-2 text-text-secondary">
+
+            {/* Search leads — pindah dari sidebar ke header (revisi Dimas 8 Okt) */}
+            <form onSubmit={submitSearch} className="mx-auto w-full max-w-md">
+              <div className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2 transition-colors focus-within:border-primary-600 focus-within:bg-surface">
+                <Search size={16} className="shrink-0 text-text-secondary" />
+                <input
+                  ref={searchInputRef}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Cari leads…"
+                  aria-label="Cari leads"
+                  className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-secondary focus:outline-none"
+                />
+                <kbd className="hidden rounded border border-border-default bg-surface px-1.5 py-0.5 text-[10px] text-text-secondary xl:block">
+                  Enter
+                </kbd>
+              </div>
+            </form>
+
+            <div className="flex shrink-0 items-center gap-2 text-text-secondary">
               <span className="hidden items-center gap-2 rounded-lg border border-border-default bg-surface px-3 py-2 text-xs sm:flex">
                 <CalendarDays size={14} />
                 Data per hari ini

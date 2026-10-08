@@ -124,7 +124,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 - `w-64 bg-surface border-r border-border-default`
 - Brand: **teks "Perumahan Grati Garden"** (revisi 8 Okt — kotak logo "GG" dihapus) + subjudul "Leads Dashboard" 2 baris; collapsed → monogram teks "PGG"
-- Search: `rounded-lg bg-gray-50 border`, icon Search, submit → navigasi ke `/leads?q=<term>`
+- Search: **pindah ke header** (revisi 8 Okt — header dulu kosong melompong); sidebar kini langsung label seksi
 - Label seksi `MAIN MENU` — `text-[11px] font-medium uppercase tracking-wider text-text-secondary`
 - Nav item: `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm` + ikon lucide 18px
   - Aktif: `bg-primary-50 font-medium text-primary-600`
