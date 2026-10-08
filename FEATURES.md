@@ -2,19 +2,19 @@
 
 Breakdown fitur per halaman, untuk jadi acuan implementasi komponen & routing.
 
-## Routing (hash mode)
+## Routing (clean URL)
 
 | Path | Halaman |
 |---|---|
-| `#/` | Dashboard / Rekap |
-| `#/leads` | Leads List |
-| `#/leads/aging` | Aging / Stuck Leads |
-| `#/units` | Unit Breakdown |
-| `#/login` | Login (Supabase Auth) |
+| `/` | Dashboard / Rekap |
+| `/leads` | Leads List |
+| `/leads/aging` | Aging / Stuck Leads |
+| `/units` | Unit Breakdown |
+| `/login` | Login (Supabase Auth) |
 
 ---
 
-## 1. Dashboard / Rekap (`#/`)
+## 1. Dashboard / Rekap (`/`)
 
 **Tujuan**: snapshot cepat kondisi funnel keseluruhan, meniru sheet "Rekap" tapi otomatis.
 
@@ -29,7 +29,7 @@ Breakdown fitur per halaman, untuk jadi acuan implementasi komponen & routing.
 
 ---
 
-## 2. Leads List (`#/leads`)
+## 2. Leads List (`/leads`)
 
 **Tujuan**: CRUD utama — tempat Dimas input dan update data leads sehari-hari.
 
@@ -60,7 +60,7 @@ Breakdown fitur per halaman, untuk jadi acuan implementasi komponen & routing.
 
 ---
 
-## 3. Aging / Stuck Leads (`#/leads/aging`)
+## 3. Aging / Stuck Leads (`/leads/aging`)
 
 **Tujuan**: highlight leads yang perlu di-push karena sudah lama tidak ada keputusan.
 
@@ -74,7 +74,7 @@ Breakdown fitur per halaman, untuk jadi acuan implementasi komponen & routing.
 
 ---
 
-## 4. Unit Breakdown (`#/units`)
+## 4. Unit Breakdown (`/units`)
 
 **Tujuan**: insight blok/unit mana yang paling diminati pasar.
 
@@ -87,14 +87,14 @@ Breakdown fitur per halaman, untuk jadi acuan implementasi komponen & routing.
 
 ---
 
-## 5. Login (`#/login`)
+## 5. Login (`/login`)
 
 **Tujuan**: autentikasi single-admin via Supabase Auth (email/password).
 
 **Komponen**:
 - Form login sederhana (email + password), React Hook Form + Zod.
-- Redirect ke `#/` setelah login sukses.
-- Protected route wrapper — semua halaman lain redirect ke `#/login` kalau belum autentikasi (dicek via Zustand auth store + Supabase session).
+- Redirect ke `/` setelah login sukses.
+- Protected route wrapper — semua halaman lain redirect ke `/login` kalau belum autentikasi (dicek via Zustand auth store + Supabase session).
 
 ---
 

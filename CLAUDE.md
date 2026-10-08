@@ -32,7 +32,7 @@ Dashboard internal untuk tracking **leads & sales funnel** Perumahan Grati Garde
 ## Tech Stack
 
 - **Framework**: React 18 + Vite (SPA, JavaScript — bukan TypeScript)
-- **Routing**: React Router v6 (`createBrowserRouter`, hash mode untuk static hosting)
+- **Routing**: React Router v6 (`createBrowserRouter`, **clean URL tanpa `#/`** — revisi 8 Okt)
 - **State Global**: Zustand (auth, UI, filter global)
 - **Database**: Supabase (PostgreSQL + Auth + Storage + RLS)
 - **Styling**: Tailwind CSS (via npm, bukan CDN)
@@ -50,7 +50,7 @@ Dashboard internal untuk tracking **leads & sales funnel** Perumahan Grati Garde
 - Bahasa kode: JavaScript (bukan TypeScript), konsisten dengan project lain milik Dimas.
 - Auth: Supabase Auth, single admin (kemungkinan tanpa role-based access karena hanya 1 user — konfirmasi lagi saat implementasi auth).
 - RLS Supabase tetap diaktifkan meski single-user, sebagai best practice.
-- Routing pakai hash mode (`#/`) karena deploy ke static hosting VPS tanpa server-side routing config.
+- Routing pakai **clean URL (tanpa `#/`)** — revisi Dimas 8 Okt: alamat seperti `domain.com/leads`. Karena itu server **WAJIB** rewrite semua path ke `index.html` (SPA fallback), kalau tidak refresh di `/leads` akan 404. `public/.htaccess` disertakan untuk Apache (ikut ke `dist/` saat build); untuk nginx tambahkan `try_files $uri $uri/ /index.html;`.
 - Ikuti pola dashboard lain milik Dimas: React + Vite + Supabase (bukan Next.js, karena ini bukan situs publik yang butuh SEO).
 
 ## Istilah Domain (Penting)

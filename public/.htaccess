@@ -1,0 +1,15 @@
+# SPA fallback — semua path diarahkan ke index.html supaya refresh
+# di /leads, /iklan, dsb tidak 404 (dipakai sejak routing clean URL,
+# tanpa #/ — revisi 8 Okt). File ini ikut tersalin ke dist/ saat build.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Jangan rewrite file/folder yang benar-benar ada (aset, favicon, dsb)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Sisanya → index.html (React Router yang menangani path-nya)
+  RewriteRule ^ index.html [L]
+</IfModule>

@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/auth'
 /**
  * Wrapper proteksi route: tunggu session selesai dimuat
  * (hindari redirect prematur saat refresh), lalu redirect ke
- * #/login kalau belum login.
+ * /login kalau belum login.
  */
 export default function ProtectedRoute() {
   const ready = useAuthStore((s) => s.ready)
