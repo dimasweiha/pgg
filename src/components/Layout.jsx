@@ -16,8 +16,7 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/auth'
-import Button from './Button.jsx'
-import Modal from './Modal.jsx'
+import SearchDialog from './SearchDialog.jsx'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -125,10 +124,12 @@ export default function Layout() {
           sidebarCollapsed ? 'w-[76px]' : 'w-64'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 px-5 py-5">
-          {sidebarCollapsed ? (
-            <span className="mx-auto text-sm font-bold text-primary-600">PGG</span>
-          ) : (
+        <div
+          className={`flex items-center py-5 ${
+            sidebarCollapsed ? 'justify-center px-2' : 'justify-between gap-2 px-5'
+          }`}
+        >
+          {!sidebarCollapsed && (
             <div className="min-w-0 leading-tight">
               <p className="truncate text-sm font-semibold text-text-primary">
                 Perumahan Grati Garden
@@ -136,14 +137,15 @@ export default function Layout() {
               <p className="text-[11px] text-text-secondary">Leads Dashboard</p>
             </div>
           )}
+          {/* Revisi Dimas 8 Okt: saat collapsed, ikon ini MENGGANTIKAN tulisan PGG */}
           <button
             type="button"
             onClick={toggleSidebar}
             title={sidebarCollapsed ? 'Buka sidebar' : 'Lipat sidebar'}
             aria-label={sidebarCollapsed ? 'Buka sidebar' : 'Lipat sidebar'}
-            className="hidden shrink-0 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-gray-50 hover:text-text-primary lg:block"
+            className="shrink-0 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-gray-50 hover:text-text-primary"
           >
-            {sidebarCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+            {sidebarCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={18} />}
           </button>
         </div>
 
@@ -228,28 +230,14 @@ export default function Layout() {
         </main>
       </div>
 
-      {/* Popup search leads (revisi Dimas 8 Okt — klik tombol header, bukan ketik di header) */}
-      <Modal open={searchOpen} title="Cari Leads" onClose={() => setSearchOpen(false)}>
-        <form onSubmit={submitSearch} className="space-y-4">
-          <div className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2.5 transition-colors focus-within:border-primary-600 focus-within:bg-surface">
-            <Search size={16} className="shrink-0 text-text-secondary" />
-            <input
-              autoFocus
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Nama, no. HP, blok unit…"
-              aria-label="Kata kunci pencarian"
-              className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-secondary focus:outline-none"
-            />
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="secondary" onClick={() => setSearchOpen(false)}>
-              Batal
-            </Button>
-            <Button type="submit">Cari</Button>
-          </div>
-        </form>
-      </Modal>
+      {/* Popup search leads (revisi Dimas 8 Okt — gaya command palette) */}
+      <SearchDialog
+        open={searchOpen}
+        term={searchTerm}
+        onTermChange={setSearchTerm}
+        onSubmit={submitSearch}
+        onClose={() => setSearchOpen(false)}
+      />
     </div>
   )
 }

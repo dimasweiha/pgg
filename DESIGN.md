@@ -86,6 +86,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 | Komponen | Spesifikasi |
 |---|---|
+| `SearchDialog` (baru 8 Okt) | Popup pencarian leads **gaya command palette**: portal ke body, overlay `bg-black/40 backdrop-blur-sm`, panel `max-w-lg rounded-2xl bg-surface shadow-2xl ring-1 ring-black/5` di `pt-[12vh]` (bukan tengah layar). Input borderless besar (`text-base`, ikon `Search` 20px) autoFocus + tombol bersihkan `×` saat ada isi. Footer hint keyboard `bg-gray-50`: kbd **Enter** "untuk mencari" + **Esc** "untuk menutup". Submit → `/leads?q=<term>`, popup tertutup & term direset. Dipakai `Layout` via state `searchOpen`, dibuka tombol search di header |
 | `Login` (redesign 8 Okt) | **Modern simple**: foto kawasan full layar + **gradasi hitam** `from-black/60 via-black/45 to-black/70` (atas gelap untuk judul, tengah lebih terang agar foto terlihat, bawah gelap). Judul **"Perumahan Grati Garden"** `text-3xl font-bold` putih `drop-shadow-lg` + "Leads Dashboard" `text-white/80`. Card form **`rounded-2xl bg-white p-8 shadow-2xl`** (putih solid — revisi Dimas: `bg-white/95` terlihat abu di atas foto gelap); input `py-3` dengan label uppercase `font-semibold`; tombol Masuk `py-3 font-semibold`. Footer kecil "© {tahun} Perumahan Grati Garden" `text-white/70`. Tanpa logo kotak "GG", tanpa teks "akses terbatas". Foto: `src/assets/kawasan.webp` |
 | `Card` | `rounded-xl border border-border-default bg-surface p-6` |
 | `SummaryCard` | baris 1: label `text-sm text-secondary`; baris 2: angka `text-2xl font-bold` + delta % hijau ↑ / merah ↓ (`text-sm`); **footer** `border-t`: selisih `+N` tebal + "dari bulan lalu" abu + arrow → (pembanding = bulan kalender lalu). Tanpa icon — keep it clean |
@@ -118,12 +119,12 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 **Judul halaman** (revisi Dimas 6 Okt): dirender **di dalam konten** tiap halaman, di atas baris penjelasan — `h1 text-xl font-semibold text-text-primary` + deskripsi `mt-0.5 text-sm text-text-secondary` (kiri), aksi/controls sejajar bawah di kanan. Header sticky TIDAK menampilkan judul lagi (revisi 8 Okt: cuma tombol menu mobile + tombol search popup + avatar mobile). Judul per halaman: Dashboard / Leads / Umur Leads / Unit Breakdown / Pengaturan.
 
-**Collapse sidebar** (revisi Dimas 6 Okt; tombol pindah 8 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` kini di **kanan teks brand di dalam sidebar** (bukan lagi di header) — melipat sidebar `w-64` → `w-[76px]` mode ikon saja: brand jadi monogram teks **"PGG"** center (kotak logo "GG" dihapus), label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
+**Collapse sidebar** (revisi Dimas 6 Okt; tombol pindah 8 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` kini di **kanan teks brand di dalam sidebar** (bukan lagi di header) — melipat sidebar `w-64` → `w-[76px]` mode ikon saja. **Saat collapsed, ikon toggle MENGGANTIKAN teks brand** (revisi 8 Okt — tidak ada lagi monogram "PGG"): area atas hanya ikon `PanelLeftOpen` center. Label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
 
 **Sidebar** (desktop ≥ lg, `hidden lg:flex`, sticky h-screen):
 
 - `w-64 bg-surface border-r border-border-default`
-- Brand: **teks "Perumahan Grati Garden"** (revisi 8 Okt — kotak logo "GG" dihapus) + subjudul "Leads Dashboard"; **tombol collapse `PanelLeftClose`/`PanelLeftOpen` di kanan teks** (revisi 8 Okt, pindah dari header); collapsed → monogram teks "PGG" center + tombol expand
+- Brand: **teks "Perumahan Grati Garden"** (revisi 8 Okt — kotak logo "GG" dihapus) + subjudul "Leads Dashboard"; **tombol collapse `PanelLeftClose` di kanan teks** (pindah dari header); collapsed → hanya ikon `PanelLeftOpen` center (menggantikan teks brand, revisi 8 Okt)
 - Label seksi `MAIN MENU` — `text-[11px] font-medium uppercase tracking-wider text-text-secondary` (search sidebar dihapus 8 Okt, pindah ke header)
 - Nav item: `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm` + ikon lucide 18px
   - Aktif: `bg-primary-50 font-medium text-primary-600`
