@@ -118,12 +118,12 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 **Judul halaman** (revisi Dimas 6 Okt): dirender **di dalam konten** tiap halaman, di atas baris penjelasan — `h1 text-xl font-semibold text-text-primary` + deskripsi `mt-0.5 text-sm text-text-secondary` (kiri), aksi/controls sejajar bawah di kanan. Header sticky TIDAK menampilkan judul lagi (cuma tombol menu mobile + badge "Data per hari ini" + avatar mobile). Judul per halaman: Dashboard / Leads / Umur Leads / Unit Breakdown / Pengaturan.
 
-**Collapse sidebar** (revisi Dimas 6 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` di kiri header (desktop) melipat sidebar `w-64` → `w-[76px]` mode ikon saja — logo GG center, search & label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
+**Collapse sidebar** (revisi Dimas 6 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` di kiri header (desktop) melipat sidebar `w-64` → `w-[76px]` mode ikon saja — brand jadi monogram teks **"PGG"** center (revisi 8 Okt, kotak logo "GG" dihapus), search & label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
 
 **Sidebar** (desktop ≥ lg, `hidden lg:flex`, sticky h-screen):
 
 - `w-64 bg-surface border-r border-border-default`
-- Brand: logo kotak `h-10 w-10 rounded-xl bg-primary-600` berisi "GG" putih + nama 2 baris
+- Brand: **teks "Perumahan Grati Garden"** (revisi 8 Okt — kotak logo "GG" dihapus) + subjudul "Leads Dashboard" 2 baris; collapsed → monogram teks "PGG"
 - Search: `rounded-lg bg-gray-50 border`, icon Search, submit → navigasi ke `/leads?q=<term>`
 - Label seksi `MAIN MENU` — `text-[11px] font-medium uppercase tracking-wider text-text-secondary`
 - Nav item: `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm` + ikon lucide 18px

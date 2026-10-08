@@ -122,13 +122,12 @@ export default function Layout() {
           sidebarCollapsed ? 'w-[76px]' : 'w-64'
         }`}
       >
-        <div className={`flex items-center gap-3 py-5 ${sidebarCollapsed ? 'justify-center px-2' : 'px-5'}`}>
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-sm font-bold text-white">
-            GG
-          </span>
-          {!sidebarCollapsed && (
+        <div className={`flex items-center py-5 ${sidebarCollapsed ? 'justify-center px-2' : 'px-5'}`}>
+          {sidebarCollapsed ? (
+            <span className="text-sm font-bold text-primary-600">PGG</span>
+          ) : (
             <div className="leading-tight">
-              <p className="text-sm font-semibold text-text-primary">Grati Garden</p>
+              <p className="text-sm font-semibold text-text-primary">Perumahan Grati Garden</p>
               <p className="text-[11px] text-text-secondary">Leads Dashboard</p>
             </div>
           )}
