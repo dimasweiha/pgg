@@ -67,7 +67,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card form */}
-        <div className="rounded-2xl bg-white/95 p-8 shadow-2xl ring-1 ring-white/20 backdrop-blur">
+        <div className="rounded-2xl bg-white p-8 shadow-2xl">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label
