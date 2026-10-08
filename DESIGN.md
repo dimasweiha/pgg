@@ -86,6 +86,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 | Komponen | Spesifikasi |
 |---|---|
+| `Login` (revisi 8 Okt) | Tengah layar `max-w-sm`. **Brand tanpa logo kotak "GG"** (dihapus permintaan Dimas) — diganti judul teks **"Perumahan Grati Garden"** `text-2xl font-bold tracking-tight` center + subjudul "Leads Dashboard" di bawahnya. **Footer "Dashboard internal — akses terbatas admin." dihapus.** Background: ilustrasi SVG **interior rumah mewah** (component `InteriorBackground` di Login.jsx — garis tipis warna `border-default`, `fixed inset-0`, perspektif lantai, chandelier, jendela, tangga, sofa, tanaman; digambar vektor lokal, bukan file foto) |
 | `Card` | `rounded-xl border border-border-default bg-surface p-6` |
 | `SummaryCard` | baris 1: label `text-sm text-secondary`; baris 2: angka `text-2xl font-bold` + delta % hijau ↑ / merah ↓ (`text-sm`); **footer** `border-t`: selisih `+N` tebal + "dari bulan lalu" abu + arrow → (pembanding = bulan kalender lalu). Tanpa icon — keep it clean |
 | `StatusBadge` | `rounded-full px-2.5 py-0.5 text-xs font-medium` + warna status |
