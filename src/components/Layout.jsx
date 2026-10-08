@@ -160,20 +160,18 @@ export default function Layout() {
         <nav className={`space-y-1 ${sidebarCollapsed ? 'px-2' : 'px-3'}`}>{navLinks()}</nav>
 
         <div className="mt-auto border-t border-border-default p-4">
-          <div className={`items-center gap-3 ${sidebarCollapsed ? 'flex flex-col' : 'flex'}`}>
-            <Avatar email={email} />
-            {!sidebarCollapsed && (
-              <span className="min-w-0 flex-1 truncate text-xs text-text-secondary">{email}</span>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              title="Logout"
-              className="rounded-lg p-2 text-text-secondary transition-colors hover:bg-gray-50 hover:text-red-600"
-            >
-              <LogOut size={16} />
-            </button>
-          </div>
+          {/* Revisi Dimas 8 Okt: avatar + email dihapus, cukup tombol Logout */}
+          <button
+            type="button"
+            onClick={handleLogout}
+            title="Logout"
+            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-gray-50 hover:text-red-600 ${
+              sidebarCollapsed ? 'justify-center' : 'w-full'
+            }`}
+          >
+            <LogOut size={16} className="shrink-0" />
+            {!sidebarCollapsed && 'Logout'}
+          </button>
         </div>
       </aside>
 
