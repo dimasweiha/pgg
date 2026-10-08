@@ -41,7 +41,7 @@ export default function LoginPage() {
         src={fotoKawasan}
         alt=""
         aria-hidden="true"
-        className="fixed inset-0 h-full w-full object-cover"
+        className="fixed inset-0 h-full w-full object-cover opacity-60"
       />
       <div className="fixed inset-0 bg-black/45" aria-hidden="true" />
 
