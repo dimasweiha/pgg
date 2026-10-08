@@ -86,7 +86,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 | Komponen | Spesifikasi |
 |---|---|
-| `Login` (revisi 8 Okt) | **Background foto kawasan full layar** (`src/assets/kawasan.webp`, `fixed inset-0 object-cover opacity-60` — transparan, revisi lanjutan 8 Okt) + **overlay hitam transparan `bg-black/45`** (gelapnya oke menurut Dimas; bagian cerah foto tetap terlihat, form putih kontras). Judul **"Perumahan Grati Garden"** putih `drop-shadow-md` + subjudul "Leads Dashboard" `text-white/80`, form card putih `shadow-xl`. Tanpa logo kotak "GG", tanpa footer "Dashboard internal". Layout split foto-kiri/form-kanan sempat dicoba lalu diganti full background |
+| `Login` (redesign 8 Okt) | **Modern simple**: foto kawasan full layar + **gradasi hitam** `from-black/60 via-black/45 to-black/70` (atas gelap untuk judul, tengah lebih terang agar foto terlihat, bawah gelap). Judul **"Perumahan Grati Garden"** `text-3xl font-bold` putih `drop-shadow-lg` + "Leads Dashboard" `text-white/80`. Card form **`rounded-2xl bg-white/95 p-8 shadow-2xl backdrop-blur`**; input `py-3` dengan label uppercase `font-semibold`; tombol Masuk `py-3 font-semibold`. Footer kecil "© {tahun} Perumahan Grati Garden" `text-white/70`. Tanpa logo kotak "GG", tanpa teks "akses terbatas". Foto: `src/assets/kawasan.webp` |
 | `Card` | `rounded-xl border border-border-default bg-surface p-6` |
 | `SummaryCard` | baris 1: label `text-sm text-secondary`; baris 2: angka `text-2xl font-bold` + delta % hijau ↑ / merah ↓ (`text-sm`); **footer** `border-t`: selisih `+N` tebal + "dari bulan lalu" abu + arrow → (pembanding = bulan kalender lalu). Tanpa icon — keep it clean |
 | `StatusBadge` | `rounded-full px-2.5 py-0.5 text-xs font-medium` + warna status |
