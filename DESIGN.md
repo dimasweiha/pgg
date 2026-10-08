@@ -86,7 +86,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 | Komponen | Spesifikasi |
 |---|---|
-| `Login` (revisi 8 Okt) | Tengah layar `max-w-sm`. **Brand tanpa logo kotak "GG"** (dihapus permintaan Dimas) — diganti judul teks **"Perumahan Grati Garden"** `text-2xl font-bold tracking-tight` center + subjudul "Leads Dashboard" di bawahnya. **Footer "Dashboard internal — akses terbatas admin." dihapus.** Background: **foto kawasan perumahan asli** (`src/assets/kawasan.webp`, revisi lanjutan 8 Okt — menggantikan ilustrasi SVG interior), `fixed inset-0 object-cover` **transparan** `opacity-15` di atas `bg-bg-base` putih supaya form login tetap dominan |
+| `Login` (revisi 8 Okt) | **Layout split (revisi lanjutan 8 Okt)**: kiri foto kawasan perumahan **penuh warna** `w-1/2 object-cover` (terlihat jelas, bukan watermark), kanan panel form login `w-1/2` center `max-w-sm`. Mobile (< lg): foto disembunyikan, form full width. Brand tanpa logo kotak "GG" — judul teks **"Perumahan Grati Garden"** `text-2xl font-bold tracking-tight` center + subjudul "Leads Dashboard". Footer "Dashboard internal — akses terbatas admin." dihapus. Foto: `src/assets/kawasan.webp` |
 | `Card` | `rounded-xl border border-border-default bg-surface p-6` |
 | `SummaryCard` | baris 1: label `text-sm text-secondary`; baris 2: angka `text-2xl font-bold` + delta % hijau ↑ / merah ↓ (`text-sm`); **footer** `border-t`: selisih `+N` tebal + "dari bulan lalu" abu + arrow → (pembanding = bulan kalender lalu). Tanpa icon — keep it clean |
 | `StatusBadge` | `rounded-full px-2.5 py-0.5 text-xs font-medium` + warna status |

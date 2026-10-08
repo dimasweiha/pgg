@@ -34,16 +34,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-bg-base px-6">
-      {/* Background foto kawasan perumahan, transparan (permintaan Dimas 8 Okt):
-          opacity rendah + overlay putih supaya form login tetap dominan */}
-      <img
-        src={fotoKawasan}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 h-full w-full object-cover opacity-15"
-      />
-      <div className="relative w-full max-w-sm">
+    <div className="flex min-h-screen bg-bg-base">
+      {/* Kiri: foto kawasan terlihat penuh (desktop ≥ lg) — revisi Dimas 8 Okt */}
+      <div className="relative hidden w-1/2 lg:block">
+        <img
+          src={fotoKawasan}
+          alt="Kawasan Perumahan Grati Garden"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
+
+      {/* Kanan: panel form login */}
+      <div className="flex w-full items-center justify-center px-6 lg:w-1/2">
+        <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
           <p className="text-2xl font-bold tracking-tight text-text-primary">
             Perumahan Grati Garden
@@ -101,6 +104,7 @@ export default function LoginPage() {
               {isSubmitting ? 'Memproses…' : 'Masuk'}
             </button>
           </form>
+        </div>
         </div>
       </div>
     </div>
