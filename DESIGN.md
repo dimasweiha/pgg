@@ -134,7 +134,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 **Header** (sticky, `bg-surface/90 backdrop-blur`, border-b):
 
-- Kiri: hamburger (mobile) + **tombol search** (ikon `Search` + label "Cari leads…", label hidden < sm) yang membuka **popup `SearchDialog`** — live search min. 3 huruf, hasil muncul langsung, klik hasil → halaman Leads (revisi 8 Okt; search sempat ada di sidebar, lalu input inline di header, kini popup dengan live results)
+- Kiri: hamburger (mobile) + **tombol search** (ikon `Search` + label "Cari leads…" + kbd hint **⌘K**; `bg-surface` putih, `sm:w-72`, `py-2.5` — revisi Dimas 8 Okt: kotaknya kurang lebar/terlalu pendek & minta background putih) yang membuka **popup `SearchDialog`** — live search min. 3 huruf, hasil muncul langsung, klik hasil → halaman Leads. Pintasan **⌘K / Ctrl+K** membuka popup dari mana saja
 - Kanan: avatar (mobile saja). Chip "Data per hari ini" **dihapus** (revisi 8 Okt)
 
 ## 8. Chart (Recharts)

@@ -84,6 +84,18 @@ export default function Layout() {
     setMobileNavOpen(false)
   }, [location.pathname])
 
+  // Pintasan ⌘K / Ctrl+K untuk membuka popup search
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   const navLinks = (onNavigate) =>
     NAV_ITEMS.map((item) => (
       <NavLink
@@ -181,16 +193,20 @@ export default function Layout() {
                 {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
 
-              {/* Search leads — tombol pembuka popup (revisi Dimas 8 Okt) */}
+              {/* Search leads — tombol pembuka popup (revisi Dimas 8 Okt:
+                  lebih lebar/tinggi + background putih, hint ⌘K) */}
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                title="Cari leads"
+                title="Cari leads (⌘K)"
                 aria-label="Cari leads"
-                className="flex items-center gap-2 rounded-lg border border-border-default bg-gray-50 px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
+                className="flex items-center gap-2 rounded-lg border border-border-default bg-surface px-3.5 py-2.5 text-sm text-text-secondary transition-colors hover:border-primary-600/40 hover:text-text-primary sm:w-72"
               >
                 <Search size={16} className="shrink-0" />
-                <span className="hidden sm:inline">Cari leads…</span>
+                <span className="hidden flex-1 text-left sm:inline">Cari leads…</span>
+                <kbd className="hidden rounded border border-border-default bg-gray-50 px-1.5 py-0.5 text-[10px] text-text-secondary sm:inline">
+                  ⌘K
+                </kbd>
               </button>
             </div>
 
