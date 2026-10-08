@@ -86,7 +86,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 | Komponen | Spesifikasi |
 |---|---|
-| `SearchDialog` (baru 8 Okt) | Popup pencarian leads **gaya command palette**: portal ke body, overlay `bg-black/40 backdrop-blur-sm`, panel `max-w-lg rounded-2xl bg-surface shadow-2xl ring-1 ring-black/5` di `pt-[12vh]` (bukan tengah layar). Input borderless besar (`text-base`, ikon `Search` 20px) autoFocus + tombol bersihkan `×` saat ada isi. Footer hint keyboard `bg-gray-50`: kbd **Enter** "untuk mencari" + **Esc** "untuk menutup". Submit → `/leads?q=<term>`, popup tertutup & term direset. Dipakai `Layout` via state `searchOpen`, dibuka tombol search di header |
+| `SearchDialog` (baru 8 Okt) | Popup pencarian leads **gaya command palette**: portal ke body, overlay `bg-black/40 backdrop-blur-sm`, panel `max-w-lg rounded-lg bg-surface shadow-2xl ring-1 ring-black/5` di `pt-[12vh]` (sudut tegas — revisi Dimas, bukan rounded-2xl). Input borderless autoFocus + spinner `Loader2` saat memuat + tombol `×` bersihkan. **Live search** (revisi 8 Okt): ketik **min. 3 huruf** → debounce 300ms → `fetchLeads({ search })` → maks 6 hasil muncul di bawah input (nama + no. HP · unit · tanggal · sales + StatusBadge), klik hasil → `/leads?q=<nama>`; tanpa hasil → pesan "Tidak ada leads cocok". `Enter` → buka halaman Leads dengan kata kunci; `Esc` tutup. Term direset tiap popup ditutup. Dipakai `Layout` via state `searchOpen` |
 | `Login` (redesign 8 Okt) | **Modern simple**: foto kawasan full layar + **gradasi hitam** `from-black/60 via-black/45 to-black/70` (atas gelap untuk judul, tengah lebih terang agar foto terlihat, bawah gelap). Judul **"Perumahan Grati Garden"** `text-3xl font-bold` putih `drop-shadow-lg` + "Leads Dashboard" `text-white/80`. Card form **`rounded-2xl bg-white p-8 shadow-2xl`** (putih solid — revisi Dimas: `bg-white/95` terlihat abu di atas foto gelap); input `py-3` dengan label uppercase `font-semibold`; tombol Masuk `py-3 font-semibold`. Footer kecil "© {tahun} Perumahan Grati Garden" `text-white/70`. Tanpa logo kotak "GG", tanpa teks "akses terbatas". Foto: `src/assets/kawasan.webp` |
 | `Card` | `rounded-xl border border-border-default bg-surface p-6` |
 | `SummaryCard` | baris 1: label `text-sm text-secondary`; baris 2: angka `text-2xl font-bold` + delta % hijau ↑ / merah ↓ (`text-sm`); **footer** `border-t`: selisih `+N` tebal + "dari bulan lalu" abu + arrow → (pembanding = bulan kalender lalu). Tanpa icon — keep it clean |
@@ -134,7 +134,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 **Header** (sticky, `bg-surface/90 backdrop-blur`, border-b):
 
-- Kiri: hamburger (mobile) + **tombol search** (ikon `Search` + label "Cari leads…", label hidden < sm) yang membuka **popup modal "Cari Leads"** — autoFocus, placeholder "Nama, no. HP, blok unit…", tombol Batal/Cari, submit → `/leads?q=<term>` (revisi 8 Okt; search sempat ada di sidebar, lalu input inline di header, kini jadi popup)
+- Kiri: hamburger (mobile) + **tombol search** (ikon `Search` + label "Cari leads…", label hidden < sm) yang membuka **popup `SearchDialog`** — live search min. 3 huruf, hasil muncul langsung, klik hasil → halaman Leads (revisi 8 Okt; search sempat ada di sidebar, lalu input inline di header, kini popup dengan live results)
 - Kanan: avatar (mobile saja). Chip "Data per hari ini" **dihapus** (revisi 8 Okt)
 
 ## 8. Chart (Recharts)

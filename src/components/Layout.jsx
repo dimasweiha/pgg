@@ -48,7 +48,6 @@ export default function Layout() {
 
   const email = session?.user?.email ?? ''
 
-  const [searchTerm, setSearchTerm] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
@@ -77,14 +76,6 @@ export default function Layout() {
     await logout()
     toast.success('Berhasil logout')
     navigate('/login', { replace: true })
-  }
-
-  const submitSearch = (e) => {
-    e.preventDefault()
-    const term = searchTerm.trim()
-    setSearchOpen(false)
-    setSearchTerm('')
-    navigate(term ? `/leads?q=${encodeURIComponent(term)}` : '/leads')
   }
 
   // Tutup nav mobile saat pindah halaman
@@ -230,14 +221,8 @@ export default function Layout() {
         </main>
       </div>
 
-      {/* Popup search leads (revisi Dimas 8 Okt — gaya command palette) */}
-      <SearchDialog
-        open={searchOpen}
-        term={searchTerm}
-        onTermChange={setSearchTerm}
-        onSubmit={submitSearch}
-        onClose={() => setSearchOpen(false)}
-      />
+      {/* Popup search leads (revisi Dimas 8 Okt — live search di dalam dialog) */}
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   )
 }
