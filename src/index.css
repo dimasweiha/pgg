@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Drawer nav mobile geser dari kiri (revisi Dimas 9 Okt) */
+@keyframes drawerIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 /* Tailwind v3 preflight tidak lagi memberi cursor:pointer ke <button> —
    semua elemen interaktif pakai cursor tangan (permintaan Dimas 7 Okt) */
 @layer base {

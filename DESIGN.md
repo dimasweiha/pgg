@@ -117,7 +117,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 
 ## 7. Sidebar & Header
 
-**Judul halaman** (revisi Dimas 6 Okt): dirender **di dalam konten** tiap halaman, di atas baris penjelasan — `h1 text-xl font-semibold text-text-primary` + deskripsi `mt-0.5 text-sm text-text-secondary` (kiri), aksi/controls sejajar bawah di kanan. Header sticky TIDAK menampilkan judul lagi (revisi 8 Okt: cuma tombol menu mobile + tombol search popup + avatar mobile). Judul per halaman: Dashboard / Leads / Umur Leads / Unit Breakdown / Pengaturan.
+**Judul halaman** (revisi Dimas 6 Okt): dirender **di dalam konten** tiap halaman, di atas baris penjelasan — `h1 text-xl font-semibold text-text-primary` + deskripsi `mt-0.5 text-sm text-text-secondary` (kiri), aksi/controls sejajar bawah di kanan. Header sticky TIDAK menampilkan judul lagi (revisi 8 Okt: cuma tombol menu mobile + tombol search popup; revisi 9 Okt: search pindah ke kanan di mobile, avatar dihapus). Judul per halaman: Dashboard / Leads / Umur Leads / Unit Breakdown / Pengaturan.
 
 **Collapse sidebar** (revisi Dimas 6 Okt; tombol pindah 8 Okt): tombol `PanelLeftClose`/`PanelLeftOpen` kini di **kanan teks brand di dalam sidebar** (bukan lagi di header) — melipat sidebar `w-64` → `w-[76px]` mode ikon saja. **Saat collapsed, ikon toggle MENGGANTIKAN teks brand** (revisi 8 Okt — tidak ada lagi monogram "PGG"): area atas hanya ikon `PanelLeftOpen` center. Label "Main Menu" disembunyikan, nav item jadi icon dengan `title` tooltip, footer avatar + logout tersusun vertikal. Lebar bertransisi 200ms; status persist via `localStorage('sidebar-collapsed')`.
 
@@ -129,13 +129,13 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 - Nav item: `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm` + ikon lucide 18px
   - Aktif: `bg-primary-50 font-medium text-primary-600`
   - Non-aktif: `text-text-secondary hover:bg-gray-50 hover:text-text-primary`
-- Bawah: border-t + user card (avatar inisial `bg-primary-50 text-primary-600` + email truncate + tombol logout icon, hover merah)
-- Mobile (< lg): sidebar hilang; header menampilkan tombol Menu yang membuka nav + logout sebagai panel dropdown
+- Bawah: border-t + tombol **Logout** saja (revisi 8 Okt — avatar + email dihapus, cukup ikon + label; collapsed jadi ikon center)
+- **Mobile (< lg)**: sidebar hilang; hamburger di kiri header membuka **drawer geser dari kiri** (revisi 9 Okt) — overlay gelap `bg-black/40` + panel `w-72 max-w-[80%]` `bg-surface border-r`, animasi `drawerIn` 200ms dari `translateX(-100%)`; isi: brand (teks + tombol X tutup), nav item, tombol Logout `mt-auto`. Tutup via overlay, tombol X, atau saat pindah halaman
 
 **Header** (sticky, `bg-surface/90 backdrop-blur`, border-b):
 
-- Kiri: hamburger (mobile) + **tombol search** (ikon `Search` + label "Cari leads…" + kbd hint **⌘K**; `bg-surface` putih, `sm:w-72`, `py-2` — revisi Dimas 8 Okt: kotaknya kurang lebar lalu terlalu tinggi, final `py-2` + minta background putih) yang membuka **popup `SearchDialog`** — live search min. 3 huruf, hasil muncul langsung, klik hasil → halaman Leads. Pintasan **⌘K / Ctrl+K** membuka popup dari mana saja
-- Kanan: avatar (mobile saja). Chip "Data per hari ini" **dihapus** (revisi 8 Okt)
+- Kiri: hamburger (mobile) + **tombol search desktop** (ikon `Search` + label "Cari leads…" + kbd hint **⌘K**; `bg-surface` putih, `sm:w-72`, `h-9` — revisi Dimas 8 Okt) yang membuka **popup `SearchDialog`** — live search min. 3 huruf, hasil muncul langsung, klik hasil → halaman Leads. Pintasan **⌘K / Ctrl+K** membuka popup dari mana saja. Tombol search desktop disembunyikan di mobile (`hidden sm:flex`)
+- **Kanan (mobile saja)**: **tombol search ikon** `sm:hidden` (revisi 9 Okt — menggantikan avatar/logo profil yang dihapus dari header mobile). Chip "Data per hari ini" **dihapus** (revisi 8 Okt)
 
 ## 8. Chart (Recharts)
 
@@ -145,6 +145,7 @@ Token didefinisikan di `tailwind.config.js` — jangan hardcode hex di komponen.
 - Bar: `radius` 4px di ujung atas
 - Tooltip: putih, `rounded-md border-border-default`, shadow tipis
 - **Leaderboard sales**: tabel minimalis ala referensi (Product info style) — header polos tanpa bg/uppercase (`text-sm font-medium text-text-secondary`), baris `border-t` dengan hover lembut; kolom Sales = **teks saja** (tanpa avatar), title-case ("Ica", bukan "ICA"); kolom angka biasa; kolom terakhir % Deal = **teks polos** ("50%", "—" kalau kosong) tanpa pill/warna. Tanpa kolom omset (dihapus atas permintaan Dimas)
+- **Tabel di mobile (revisi 9 Okt)**: semua tabel (Leaderboard, Leads, Umur Leads, Unit Breakdown, Performa Iklan, Pengaturan) dibungkus `overflow-x-auto` + `min-w-[...]`, sehingga di mobile bisa **digeser horizontal** tanpa kolom menyusut/terpotong
 
 ## 9. Aturan untuk AI Agent
 

@@ -261,7 +261,8 @@ export default function DashboardPage() {
         {leaderboard.length === 0 ? (
           <p className="text-sm text-text-secondary">Belum ada data sales.</p>
         ) : (
-          <table className="w-full min-w-[760px] table-fixed text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] table-fixed text-sm">
             <colgroup>
               <col />
               <col className="w-[9%]" />
@@ -315,6 +316,7 @@ export default function DashboardPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </Card>
     </div>
