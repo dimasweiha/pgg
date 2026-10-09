@@ -194,16 +194,17 @@ export default function Layout() {
               </button>
             </div>
 
-            {/* Kanan: search (mobile) — logo/avatar profil dihapus (revisi Dimas 9 Okt) */}
-            <div className="ml-auto flex shrink-0 items-center gap-2">
+            {/* Kanan: search (mobile) dengan teks — logo/avatar profil dihapus (revisi Dimas 9 Okt) */}
+            <div className="ml-auto flex min-w-0 flex-1 justify-end sm:hidden">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
                 title="Cari leads"
                 aria-label="Cari leads"
-                className="rounded-lg p-2 text-text-secondary transition-colors hover:bg-gray-50 hover:text-text-primary sm:hidden"
+                className="flex h-9 w-full max-w-[220px] items-center gap-2 rounded-lg border border-border-default bg-surface px-3 text-sm text-text-secondary transition-colors hover:border-primary-600/40 hover:text-text-primary"
               >
-                <Search size={20} />
+                <Search size={16} className="shrink-0" />
+                <span className="flex-1 truncate text-left">Cari leads…</span>
               </button>
             </div>
           </div>
